@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlpineJS Bootcamp Widgets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .widget {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>AlpineJS Bootcamp Widgets</h1>
+
+    <!-- Greet Function Widget -->
+    <div class="widget" x-data="greetWidget()">
+        <h2>Greet Function</h2>
+        <label for="language">Choose a language:</label>
+        <select id="language" x-model="language">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+        </select>
+        <button @click="greet">Greet</button>
+        <p x-text="message"></p>
+    </div>
+
+    <!-- Transport Fee Function Widget -->
+    <div class="widget" x-data="transportFeeWidget()">
+        <h2>Transport Fee Function</h2>
+        <label>
+            <input type="radio" name="shift" value="morning" x-model="shift"> Morning
+        </label>
+        <label>
+            <input type="radio" name="shift" value="afternoon" x-model="shift"> Afternoon
+        </label>
+        <label>
+            <input type="radio" name="shift" value="night" x-model="shift"> Night
+        </label>
+        <button @click="calculateFee">Calculate Fee</button>
+        <p x-text="fee"></p>
+    </div>
+
+    <!-- Total Phone Bill Function Widget -->
+    <div class="widget" x-data="totalPhoneBillWidget()">
+        <h2>Total Phone Bill Function</h2>
+        <label for="phoneString">Enter phone usage string:</label>
+        <input id="phoneString" type="text" x-model="phoneString">
+        <button @click="calculateBill">Calculate Total Bill</button>
+        <p x-text="totalBill"></p>
+    </div>
+
+    <!-- Enough Airtime Function Widget -->
+    <div class="widget" x-data="enoughAirtimeWidget()">
+        <h2>Enough Airtime Function</h2>
+        <label for="usageString">Enter usage string:</label>
+        <input id="usageString" type="text" x-model="usageString">
+        <label for="airtimeAvailable">Enter available airtime:</label>
+        <input id="airtimeAvailable" type="number" x-model="airtimeAvailable">
+        <button @click="calculateAirtime">Calculate Remaining Airtime</button>
+        <p x-text="remainingAirtime"></p>
+    </div>
+
+    <script>
+        function greetWidget() {
+            return {
+                language: 'en',
+                message: '',
+                greet() {
+                    const greetings = {
+                        en: 'Hello',
+                        es: 'Hola',
+                        fr: 'Bonjour'
+                    };
+                    this.message = greetings[this.language] || 'Hello';
+                }
+            }
+        }
+
+        function transportFeeWidget() {
+            return {
+                shift: 'morning',
+                fee: '',
+                calculateFee() {
+                    const fees = {
+                        morning: 'R20',
+                        afternoon: 'R10',
+                        night: 'R15'
+                    };
+                    this.fee = fees[this.shift] || 'R0';
+                }
+            }
+        }
+
+        function totalPhoneBillWidget() {
+            return {
+                phoneString: '',
+                totalBill: '',
+                calculateBill() {
+                    const callCost = 2.75;
+                    const smsCost = 0.65;
+                    let total = 0;
+                    const items = this.phoneString.split(',');
+                    for (let item of items) {
+                        if (item.trim() === 'call') {
+                            total += callCost;
+                        } else if (item.trim() === 'sms') {
+                            total += smsCost;
+                        }
+                    }
+                    this.totalBill = `R${total.toFixed(2)}`;
+                }
+            }
+        }
+
+        function enoughAirtimeWidget() {
+            return {
+                usageString: '',
+                airtimeAvailable: 0,
+                remainingAirtime: '',
+                calculateAirtime() {
+                    const costs = {
+                        call: 2.75,
+                        sms: 0.65,
+                        data: 12.00
+                    };
+                    let totalCost = 0;
+                    const items = this.usageString.split(',');
+                    for (let item of items) {
+                        totalCost += costs[item.trim()] || 0;
+                    }
+                    this.remainingAirtime = `R${(this.airtimeAvailable - totalCost).toFixed(2)}`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
