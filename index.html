@@ -115,10 +115,14 @@
                     let total = 0;
                     const items = this.phoneString.split(',');
                     for (let item of items) {
-                        if (item.trim() === 'call') {
+                        item = item.trim();
+                        if (item === 'call') {
                             total += callCost;
-                        } else if (item.trim() === 'sms') {
+                        } else if (item === 'sms') {
                             total += smsCost;
+                        } else if (!isNaN(item)) {
+                            this.totalBill = 'Error: Input string should not contain numbers.';
+                            return;
                         }
                     }
                     this.totalBill = `R${total.toFixed(2)}`;
